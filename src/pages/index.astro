@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Diakite Roofing & Restoration">
+  <main class="grid min-h-screen place-items-center px-6">
+    <div class="text-center">
+      <h1 data-intro class="text-4xl font-black uppercase tracking-tight sm:text-6xl">
+        Diakite Roofing <span class="text-amber">&amp;</span> Restoration
+      </h1>
+      <p data-intro class="mt-4 text-lg">New website coming soon.</p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import gsap from 'gsap';
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    gsap.from('[data-intro]', { y: 24, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' });
+  }
+</script>
