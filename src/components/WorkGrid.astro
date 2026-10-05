@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import home1 from '../assets/photos/home-1.png';
+import home2 from '../assets/photos/home-2.png';
+import home3 from '../assets/photos/home-3.png';
+import home4 from '../assets/photos/home-4.png';
+import home5 from '../assets/photos/home-5.png';
+import drone from '../assets/photos/roof-drone.png';
+
+// Placeholder images: replace with photos of real jobs before launch.
+const tiles = [
+  { src: home2, alt: 'Brick colonial home with a new charcoal shingle roof' },
+  { src: home3, alt: 'White two-story home with a new brown shingle roof' },
+  { src: home1, alt: 'Brick and stucco home with a new dark gray roof' },
+  { src: drone, alt: 'A new gray roof seen from above, surrounded by trees' },
+  { src: home4, alt: 'Craftsman bungalow with a new weathered-wood shingle roof' },
+  { src: home5, alt: 'Gray craftsman home with a new brown shingle roof' },
+];
+---
+
+<section class="overflow-hidden py-20 lg:py-32">
+  <div class="wrap grid items-center gap-14 lg:grid-cols-2">
+    <div>
+      <p class="eyebrow" data-reveal>Recent work</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">New roofs</span>
+        <span data-line class="block">across</span>
+        <span data-line class="block font-bold">
+          <span class="relative isolate inline-block whitespace-nowrap">
+            <span data-mark class="absolute -inset-x-[0.08em] bottom-[0.06em] -z-10 h-[0.42em] origin-left bg-amber"></span>
+            Central Maryland
+          </span>
+        </span>
+      </h2>
+      <div data-reveal class="mt-8 flex flex-wrap items-center gap-5">
+        <a href="/gallery/" class="btn btn-dark">See the gallery</a>
+        <p class="max-w-[17rem] text-sm leading-snug text-ink-soft">
+          Seven counties, all within about 35 miles of Columbia.
+        </p>
+      </div>
+    </div>
+
+    <div class="-rotate-[7deg] lg:w-[135%]">
+      <div data-tiles class="grid grid-cols-3 gap-2 sm:gap-3">
+        {tiles.map((tile) => (
+          <div data-tile class="aspect-square overflow-hidden bg-line">
+            <Image
+              src={tile.src}
+              alt={tile.alt}
+              widths={[240, 400, 600]}
+              sizes="(min-width: 1024px) 24vw, 32vw"
+              class="size-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

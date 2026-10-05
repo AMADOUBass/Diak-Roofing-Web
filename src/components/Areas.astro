@@ -1,0 +1,34 @@
+---
+import { areas } from '../data/site';
+---
+
+<section class="py-20 lg:py-28">
+  <div class="wrap grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-20">
+    <div>
+      <p class="eyebrow" data-reveal>Where we work</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">Based in Columbia.</span>
+        <span data-line class="block">Seven counties</span>
+        <span data-line class="block">covered.</span>
+      </h2>
+      <p data-reveal class="mt-6 max-w-md text-lg leading-relaxed text-ink-soft">
+        Howard, Anne Arundel, Montgomery, Prince George's, Carroll, Frederick and Baltimore counties, roughly 35 miles around Columbia.
+      </p>
+    </div>
+
+    <ul data-rows class="flex flex-wrap gap-2.5">
+      {areas.map((area) => (
+        <li data-row>
+          <a href={area.href} class="inline-flex min-h-11 items-center rounded-full border border-ink/25 px-5 font-display text-sm font-semibold transition-colors hover:border-amber hover:bg-amber">
+            {area.label}
+          </a>
+        </li>
+      ))}
+      <li data-row>
+        <a href="/service-areas/" class="inline-flex min-h-11 items-center rounded-full bg-ink px-5 font-display text-sm font-semibold text-paper transition-colors hover:bg-ink/85">
+          All service areas
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>

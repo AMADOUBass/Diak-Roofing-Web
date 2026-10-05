@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import crew from '../assets/photos/crew-tearoff.png';
+import inspection from '../assets/photos/inspection-chalk.png';
+
+// Every number here is a claim the business already makes; keep them true.
+const stats = [
+  { value: '5.0', label: 'Google rating' },
+  { value: '1', label: 'Day for most roofs' },
+  { value: '100', unit: 'ft', label: 'Of gutter included' },
+  { value: '7', label: 'Counties served' },
+];
+---
+
+<section class="overflow-hidden bg-ink py-20 text-paper lg:py-32">
+  <div class="wrap grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+    <!-- Placeholder images: replace with photos of real jobs before launch. -->
+    <div data-photo-stack class="relative mb-[14%] max-w-xl">
+      <div data-photo class="w-[78%] overflow-hidden">
+        <Image
+          src={crew}
+          alt="Three roofers replacing a roof, half stripped to the wood decking and half newly shingled"
+          widths={[400, 640, 900]}
+          sizes="(min-width: 1024px) 36vw, 78vw"
+          class="aspect-[4/5] w-full object-cover object-left"
+        />
+      </div>
+      <div data-photo class="absolute -bottom-[14%] right-0 w-[52%] overflow-hidden border-4 border-ink">
+        <Image
+          src={inspection}
+          alt="A gloved hand circling hail damage on a shingle in chalk while photographing it"
+          widths={[300, 480, 640]}
+          sizes="(min-width: 1024px) 24vw, 52vw"
+          class="aspect-square w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <div>
+      <p class="eyebrow text-paper/60" data-reveal>Who you're calling</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">One roofer,</span>
+        <span data-line class="block">accountable</span>
+        <span data-line class="block">for your roof</span>
+      </h2>
+      <p data-reveal class="mt-6 max-w-md text-lg leading-relaxed text-paper/75">
+        Diakite Roofing &amp; Restoration is owner-run. The person who inspects your roof is the person you spoke to on the phone, and the scope goes in writing before any work starts.
+      </p>
+      <a data-reveal href="/about/" class="btn btn-light mt-8">About us</a>
+
+      <dl data-counts class="mt-12 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-paper/15 pt-10 sm:grid-cols-4">
+        {stats.map((stat) => (
+          <div data-stat class="flex flex-col-reverse gap-1">
+            <dt class="text-sm leading-snug text-paper/70">{stat.label}</dt>
+            <dd class="font-display text-5xl font-semibold tabular-nums tracking-tight text-amber">
+              <span data-count={stat.value}>{stat.value}</span>{stat.unit && <span class="ml-1 text-2xl">{stat.unit}</span>}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

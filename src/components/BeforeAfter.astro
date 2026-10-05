@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import after from '../assets/photos/ba-overhead-after.webp';
+import before from '../assets/photos/ba-overhead-before.webp';
+---
+
+<!-- Real photos of one job. On wide screens the section holds still while scrolling moves the dividing line. -->
+<section class="bg-ink text-paper">
+  <div class="wrap grid items-center gap-12 py-20 lg:min-h-[calc(100vh-4.5625rem)] lg:grid-cols-[5fr_7fr] lg:gap-20 lg:py-14">
+    <div>
+      <p class="eyebrow text-paper/60" data-reveal>Before and after</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">Same house.</span>
+        <span data-line class="block text-amber">New roof.</span>
+      </h2>
+      <p data-reveal class="mt-6 max-w-md text-lg leading-relaxed text-paper/75">
+        One home, photographed from above before the tear-off and again once the new roof was on. Keep scrolling to see the change.
+      </p>
+      <a data-reveal href="/gallery/" class="btn btn-light mt-8">More of our work</a>
+    </div>
+
+    <figure data-compare class="relative aspect-[4/3] select-none overflow-hidden bg-paper/10" style="--p: 50%">
+      <Image
+        src={before}
+        alt="Before: an aging gray roof seen from above, with a blue tarp over one corner"
+        widths={[480, 768, 996]}
+        sizes="(min-width: 1024px) 55vw, 92vw"
+        class="absolute inset-0 size-full object-cover"
+      />
+      <Image
+        src={after}
+        alt="After: the same house from above with a new architectural shingle roof"
+        widths={[480, 768, 996]}
+        sizes="(min-width: 1024px) 55vw, 92vw"
+        class="absolute inset-0 size-full object-cover [clip-path:inset(0_0_0_var(--p))]"
+      />
+      <span class="absolute inset-y-0 left-[var(--p)] w-1 -translate-x-1/2 bg-amber" aria-hidden="true"></span>
+      <span class="absolute left-3 top-3 bg-ink/85 px-3 py-1.5 font-display text-xs font-bold uppercase tracking-widest" aria-hidden="true">Before</span>
+      <span class="absolute right-3 top-3 bg-amber px-3 py-1.5 font-display text-xs font-bold uppercase tracking-widest text-ink" aria-hidden="true">After</span>
+    </figure>
+  </div>
+</section>

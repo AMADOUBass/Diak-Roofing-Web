@@ -1,0 +1,57 @@
+---
+import { faq } from '../data/faq';
+
+// Tells search engines these are questions and answers.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<section class="bg-tint py-20 lg:py-32">
+  <div class="wrap grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-20">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <p class="eyebrow" data-reveal>Good to know</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">Questions,</span>
+        <span data-line class="block">answered</span>
+      </h2>
+    </div>
+
+    <div data-rows class="border-t border-ink/15">
+      {faq.map((item) => (
+        <details data-row class="group border-b border-ink/15">
+          <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-4 font-display text-xl font-medium tracking-tight [&::-webkit-details-marker]:hidden">
+            {item.question}
+            <span class="grid size-9 shrink-0 place-items-center rounded-full border border-ink/30 transition duration-300 group-open:rotate-45 group-open:border-amber group-open:bg-amber" aria-hidden="true">
+              <svg class="size-3.5" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 1v12M1 7h12" /></svg>
+            </span>
+          </summary>
+          <p class="faq-answer max-w-2xl pb-6 leading-relaxed text-ink-soft">{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    details[open] .faq-answer {
+      animation: faq-in 0.35s ease-out;
+    }
+  }
+
+  @keyframes faq-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+  }
+</style>

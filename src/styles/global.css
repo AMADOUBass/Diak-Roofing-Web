@@ -1,7 +1,82 @@
 @import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource-variable/figtree";
+@import "lenis/dist/lenis.css";
 
 @theme {
   --color-ink: #17181c;
+  --color-ink-soft: #4d525a;
   --color-amber: #fbb204;
+  --color-amber-deep: #e09f02;
   --color-paper: #fbfaf7;
+  --color-line: #dfdcd3;
+  --color-mute: #85898f;
+  --color-tint: #f1efe8;
+
+  --font-display: "Archivo Variable", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-sans: "Figtree Variable", "Segoe UI", system-ui, sans-serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-amber);
+    outline-offset: 2px;
+  }
+}
+
+/* Intro elements wait hidden for the page-load animation (see Layout and Hero). */
+html.motion:not(.intro-done)[data-intro-page] [data-intro] {
+  opacity: 0;
+}
+
+@layer components {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wrap {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  /* Buttons animate "translate", never "transform": GSAP owns transform for the scroll reveals. */
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-display text-sm font-bold uppercase tracking-wide transition-[translate,background-color,border-color,color] duration-200 hover:-translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply bg-amber text-ink hover:bg-amber-deep;
+  }
+
+  .btn-dark {
+    @apply bg-ink text-paper hover:bg-ink/85;
+  }
+
+  .btn-light {
+    @apply bg-paper text-ink hover:bg-paper/85;
+  }
+
+  .eyebrow {
+    @apply font-display text-xs font-bold uppercase tracking-[0.18em] text-ink-soft;
+  }
+
+  .btn-outline {
+    @apply border-2 border-ink text-ink hover:bg-ink hover:text-paper;
+  }
 }

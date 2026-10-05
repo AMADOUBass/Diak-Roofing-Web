@@ -1,0 +1,225 @@
+---
+import { Image } from 'astro:assets';
+import cutout from '../assets/photos/hero-cutout.png';
+import { site } from '../data/site';
+import Marquee from './Marquee.astro';
+
+// Placement of the cut-out: width on screen, height-to-width ratio, how far it is pulled up
+// toward the headline (0.1 puts the hard hat just under the letters), and its size and offset on phones.
+const photoVars =
+  '--photo-w: 1; --photo-ratio: 0.747; --photo-pull: 0.1; --photo-w-sm: 150%; --photo-up-sm: -10%; --photo-up-md: -6%';
+
+const headline = ['Honest', 'roofing'];
+---
+
+<section data-hero class="hero" style={photoVars}>
+  <div class="hero-body">
+    <div class="wrap hero-copy">
+      <h1 data-hero-title data-intro class="font-medium uppercase tracking-[-0.04em]">
+        <span class="block text-[length:var(--fs)] leading-[0.86]">
+          {headline.map((word) => (
+            <span class="block overflow-hidden pb-[0.06em] sm:mr-[0.2em] sm:inline-block sm:align-bottom sm:last:mr-0">
+              <span data-word class="inline-block">{word}</span>
+            </span>
+          ))}
+        </span>
+        <span class="mt-3 block text-[clamp(1.4rem,4.4vw,3.75rem)] leading-none sm:text-right">
+          <span class="block overflow-hidden pb-[0.12em]">
+            <span data-word class="relative isolate inline-block">
+              <span data-highlight class="absolute -inset-x-[0.12em] bottom-[0.02em] -z-10 h-[0.5em] origin-left bg-amber"></span>
+              in Columbia, Maryland
+            </span>
+          </span>
+        </span>
+      </h1>
+
+      <div class="hero-row">
+        <div class="hero-side">
+          <p data-hero-fade data-intro class="text-lg leading-relaxed text-ink-soft">
+            The owner walks your roof himself, photographs every slope and shows you what he found. If it doesn't need replacing, he'll tell you.
+          </p>
+          <div data-hero-fade data-intro class="hero-buttons">
+            <a href="#inspection" class="btn btn-primary">Book a free inspection</a>
+            <a href={site.phoneHref} class="btn btn-outline">Call {site.phone}</a>
+          </div>
+        </div>
+        <p data-hero-fade data-intro class="hero-note font-display uppercase leading-tight tracking-tight text-mute">
+          5.0 on Google<br />Most roofs done<br class="hidden xl:inline" /> in one day
+        </p>
+      </div>
+    </div>
+
+    <!-- A cut-out photo: from 1280px up it rises behind the copy, with the hard hat just under the headline. -->
+    <div data-hero-photo data-intro class="hero-photo">
+      <Image
+        data-hero-img
+        src={cutout}
+        alt="A roofer in a yellow hard hat sitting on the ridge of a newly shingled roof"
+        widths={[640, 1024, 1600, 2048]}
+        quality={90}
+        sizes="(min-width: 768px) 100vw, 150vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+
+  <Marquee />
+</section>
+
+<style>
+  .hero {
+    --fs: 18vw; /* headline size */
+    --pad: 2rem; /* space above the headline */
+  }
+
+  .hero-body {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-copy {
+    padding-top: var(--pad);
+  }
+
+  .hero-row {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .hero-side {
+    display: grid;
+    gap: 1.25rem;
+    max-width: 32rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero-note {
+    font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+  }
+
+  .hero-photo {
+    margin-top: 1.5rem;
+    max-height: 62vh;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-photo img {
+    display: block;
+    width: var(--photo-w-sm);
+    max-width: none;
+    height: auto;
+    margin-top: var(--photo-up-sm); /* the cut-out has empty space above the roofer */
+  }
+
+  @media (min-width: 640px) {
+    .hero {
+      --fs: min(9.3vw, 8.2rem);
+      --pad: 3rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-photo img {
+      width: calc(100% * var(--photo-w));
+      margin-top: var(--photo-up-md);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-row {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      margin-top: 2rem;
+    }
+
+    .hero-note {
+      text-align: right;
+    }
+  }
+
+  /* Wide layout: the roofer sits right under the headline, the copy sits in the open sky to his right. */
+  @media (min-width: 1280px) {
+    .hero {
+      --line: calc(var(--fs) * 0.92); /* height of the first headline line */
+      --h: calc(100vw * var(--photo-w) * var(--photo-ratio)); /* photo height on screen */
+    }
+
+    .hero-body {
+      min-height: calc(var(--pad) + var(--line) + min(var(--h) * (1 - var(--photo-pull)), 100vh - 22rem));
+    }
+
+    .hero-row {
+      display: block;
+    }
+
+    .hero-side {
+      width: 46%;
+      max-width: none;
+      margin-left: auto;
+      justify-items: end;
+      text-align: right;
+    }
+
+    .hero-buttons {
+      justify-content: flex-end;
+    }
+
+    .hero-note {
+      position: absolute;
+      top: calc(var(--pad) + var(--line) + 2.75rem);
+      max-width: 15rem;
+      font-size: 1.15rem;
+      text-align: left;
+    }
+
+    .hero-photo {
+      position: absolute;
+      top: calc(var(--pad) + var(--line) - var(--h) * var(--photo-pull));
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      max-height: none;
+      margin-top: 0;
+      overflow: visible;
+    }
+
+    .hero-photo img {
+      margin-top: 0;
+    }
+  }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Staged page load: header pieces, photo, headline word by word, then the rest.
+    gsap
+      .timeline({ defaults: { ease: 'power3.out' } })
+      .fromTo('header [data-intro]', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06 })
+      .fromTo('[data-hero-photo]', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.2 }, 0.3)
+      .set('[data-hero-title]', { opacity: 1 }, 0.6)
+      .fromTo('[data-hero] [data-word]', { yPercent: 115 }, { yPercent: 0, duration: 0.9, stagger: 0.1, ease: 'power4.out' }, 0.6)
+      .fromTo('[data-hero] [data-highlight]', { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: 'power2.inOut' }, '-=0.5')
+      .fromTo('[data-hero-fade]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }, '-=0.4')
+      .fromTo('[data-hero-band]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.5');
+
+    // The photo lags slightly behind the page as you scroll.
+    gsap.to('[data-hero-img]', {
+      yPercent: 6,
+      ease: 'none',
+      scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+    });
+  }
+</script>

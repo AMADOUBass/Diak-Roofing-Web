@@ -1,0 +1,109 @@
+---
+const steps = [
+  {
+    title: 'Free inspection',
+    text: "We walk the roof and photograph every slope, including the parts you can't see from the ground.",
+  },
+  {
+    title: 'You see the photos',
+    text: 'You look through the same photos we took before anyone talks about price.',
+  },
+  {
+    title: 'Scope in writing',
+    text: 'Shingle color, line items and an install date, on paper. Permits are handled for you.',
+  },
+  {
+    title: 'Installed in a day',
+    text: 'Most homes are torn off in the morning and finished by evening. Magnets sweep the lawn and driveway before we leave.',
+  },
+];
+---
+
+<section class="bg-tint py-20 lg:py-32">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal>How it works</p>
+    <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+      <span data-line class="block">From first call</span>
+      <span data-line class="block">to finished roof</span>
+    </h2>
+
+    <!-- The line fills as you scroll: --progress goes from 0 to 1. -->
+    <ol data-progress data-rows class="process mt-14 grid gap-10 lg:grid-cols-4 lg:gap-8" style="--progress: 1">
+      {steps.map((step, i) => (
+        <li data-row class="step">
+          <span class="font-display text-sm font-semibold tabular-nums text-ink-soft">Step {i + 1}</span>
+          <h3 class="mt-2 text-2xl font-medium tracking-tight">{step.title}</h3>
+          <p class="mt-3 leading-relaxed text-ink-soft">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    position: relative;
+    padding-left: 2.25rem;
+  }
+
+  .process::before,
+  .process::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0.3rem;
+    width: 2px;
+    background: color-mix(in srgb, var(--color-ink) 15%, transparent);
+    content: '';
+  }
+
+  .process::after {
+    background: var(--color-ink);
+    transform: scaleY(var(--progress));
+    transform-origin: top;
+  }
+
+  .step {
+    position: relative;
+  }
+
+  .step::before {
+    position: absolute;
+    top: 0.3rem;
+    left: calc(-2.25rem + 0.3rem - 5px);
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-ink);
+    border-radius: 50%;
+    background: var(--color-amber);
+    content: '';
+  }
+
+  @media (min-width: 1024px) {
+    .process {
+      padding-top: 2.75rem;
+      padding-left: 0;
+    }
+
+    .process::before,
+    .process::after {
+      top: 0.3rem;
+      right: 0;
+      bottom: auto;
+      left: 0;
+      width: auto;
+      height: 2px;
+    }
+
+    .process::after {
+      transform: scaleX(var(--progress));
+      transform-origin: left;
+    }
+
+    .step::before {
+      top: calc(-2.75rem + 0.3rem - 5px);
+      left: 0;
+    }
+  }
+</style>

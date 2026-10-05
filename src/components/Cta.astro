@@ -1,0 +1,400 @@
+---
+import { site } from '../data/site';
+
+const fields = [
+  { name: 'name', label: 'Full name', type: 'text', autocomplete: 'name', required: true },
+  { name: 'phone', label: 'Phone', type: 'tel', autocomplete: 'tel', inputmode: 'tel', required: true },
+  { name: 'email', label: 'Email (optional)', type: 'email', autocomplete: 'email', inputmode: 'email', required: false },
+] as const;
+---
+
+<section id="inspection" class="scroll-mt-20 bg-amber py-20 text-ink lg:py-28">
+  <div class="wrap grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20">
+    <div>
+      <p class="eyebrow text-ink" data-reveal>Free inspection</p>
+      <h2 data-words class="mt-4 text-[clamp(2.6rem,6vw,5.25rem)] font-medium leading-[0.98] tracking-[-0.035em]">
+        Get a straight answer about your roof.
+      </h2>
+      <p data-reveal class="mt-6 max-w-md text-lg leading-relaxed">
+        No cost and no obligation. If your roof is fine, that's what you'll hear.
+      </p>
+      <p data-reveal class="mt-8">
+        <span class="block text-sm font-semibold uppercase tracking-widest">Or call</span>
+        <a href={site.phoneHref} class="font-display text-[clamp(2rem,4.5vw,3.5rem)] font-semibold tracking-tight underline-offset-8 hover:underline focus-visible:outline-ink">
+          {site.phone}
+        </a>
+        <span class="block text-sm">{site.hours}</span>
+      </p>
+    </div>
+
+    <!-- TODO: connect to a server route (roadmap part 5). For now a valid request opens the visitor's email app, filled in. -->
+    <form data-inspection-form data-reveal data-email={site.email} novalidate class="form bg-ink text-paper">
+      <div data-form-fields data-rows class="grid gap-5 p-7 sm:p-9">
+        <p data-row class="font-display text-2xl font-medium tracking-tight">Book your free roof inspection</p>
+
+        {fields.map((field) => (
+          <div data-row data-field={field.name} class="field">
+            <input
+              id={`inspection-${field.name}`}
+              name={field.name}
+              type={field.type}
+              autocomplete={field.autocomplete}
+              inputmode={'inputmode' in field ? field.inputmode : undefined}
+              required={field.required}
+              placeholder=" "
+              aria-describedby={`inspection-${field.name}-error`}
+            />
+            <label for={`inspection-${field.name}`}>{field.label}</label>
+            <svg class="field-check" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5" /></svg>
+            <p class="field-error" id={`inspection-${field.name}-error`} aria-live="polite"><span></span></p>
+          </div>
+        ))}
+
+        <div data-row data-field="message" class="field">
+          <textarea id="inspection-message" name="message" rows="3" maxlength="1000" placeholder=" "></textarea>
+          <label for="inspection-message">What's going on with the roof? (optional)</label>
+        </div>
+
+        <!-- Left empty by people; filled by spam bots. -->
+        <p class="hidden" aria-hidden="true">
+          <label>Company <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <button data-row type="submit" class="submit btn btn-primary mt-1 w-full">
+          Book my free inspection
+          <svg class="size-4 transition-transform duration-300" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+        </button>
+      </div>
+
+      <div data-form-success hidden tabindex="-1" class="success grid content-center justify-items-start gap-4 p-7 sm:p-9">
+        <svg class="success-check size-16 text-amber" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="24" cy="24" r="21" />
+          <path d="M14 25l7 7 13-15" />
+        </svg>
+        <p class="font-display text-3xl font-medium tracking-tight">Almost done<span data-form-name></span>.</p>
+        <p class="max-w-sm leading-relaxed text-paper/80">
+          Your email app is opening with your request filled in. Press send there and we'll call you back to set a time.
+        </p>
+        <p class="text-sm text-paper/65">
+          Nothing opened? Call <a href={site.phoneHref} class="font-semibold text-amber underline underline-offset-4">{site.phone}</a>.
+        </p>
+        <button type="button" data-form-reset class="btn mt-2 border-2 border-paper/40 text-paper hover:border-paper">Start over</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .form {
+    --error: #ff9a85;
+    position: relative;
+  }
+
+  /* Floating label: it rests inside the box and lifts when the field is focused or filled. */
+  .field {
+    position: relative;
+  }
+
+  .field input,
+  .field textarea {
+    display: block;
+    width: 100%;
+    min-height: 3.75rem;
+    padding: 1.55rem 2.75rem 0.5rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-paper) 28%, transparent);
+    background: color-mix(in srgb, var(--color-paper) 7%, transparent);
+    color: var(--color-paper);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
+  }
+
+  .field textarea {
+    resize: vertical;
+  }
+
+  .field input:hover,
+  .field textarea:hover {
+    border-color: color-mix(in srgb, var(--color-paper) 50%, transparent);
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--color-amber);
+    background: color-mix(in srgb, var(--color-paper) 11%, transparent);
+    outline: none;
+  }
+
+  .field label {
+    position: absolute;
+    top: 1.2rem;
+    left: 1rem;
+    color: color-mix(in srgb, var(--color-paper) 70%, transparent);
+    pointer-events: none;
+    transform-origin: left top;
+    transition:
+      transform 0.2s ease-out,
+      color 0.2s;
+  }
+
+  .field :is(input, textarea):focus + label,
+  .field :is(input, textarea):not(:placeholder-shown) + label {
+    color: var(--color-amber);
+    transform: translateY(-0.75rem) scale(0.75);
+  }
+
+  /* An amber line draws under the field while it has focus. */
+  .field::after {
+    position: absolute;
+    top: 3.75rem;
+    right: 0;
+    left: 0;
+    height: 2px;
+    margin-top: -2px;
+    background: var(--color-amber);
+    content: '';
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease-out;
+  }
+
+  .field:focus-within::after {
+    transform: scaleX(1);
+  }
+
+  .field[data-field='message']::after {
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+  }
+
+  /* Valid: a check mark draws itself in. */
+  .field-check {
+    position: absolute;
+    top: 1.35rem;
+    right: 1rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--color-amber);
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    transition: stroke-dashoffset 0.35s ease-out;
+  }
+
+  .field[data-state='valid'] .field-check {
+    stroke-dashoffset: 0;
+  }
+
+  /* Invalid: red border and label, and the message slides open. */
+  .field[data-state='invalid'] input {
+    border-color: var(--error);
+  }
+
+  .field[data-state='invalid']::after {
+    background: var(--error);
+    transform: scaleX(1);
+  }
+
+  .field[data-state='invalid'] label {
+    color: var(--error) !important;
+  }
+
+  .field-error {
+    display: grid;
+    grid-template-rows: 0fr;
+    color: var(--error);
+    font-size: 0.875rem;
+    opacity: 0;
+    transition:
+      grid-template-rows 0.25s ease-out,
+      opacity 0.25s;
+  }
+
+  .field-error span {
+    overflow: hidden;
+  }
+
+  .field[data-state='invalid'] .field-error {
+    grid-template-rows: 1fr;
+    padding-top: 0.4rem;
+    opacity: 1;
+  }
+
+  .submit:hover svg {
+    transform: translateX(4px);
+  }
+
+  .success-check circle {
+    stroke-dasharray: 132;
+  }
+
+  .success-check path {
+    stroke-dasharray: 32;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .field.shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .success:not([hidden]) {
+      animation: success-in 0.5s ease-out;
+    }
+
+    .success:not([hidden]) .success-check circle {
+      animation: draw 0.6s ease-out both;
+      stroke-dashoffset: 132;
+    }
+
+    .success:not([hidden]) .success-check path {
+      animation: draw 0.4s 0.45s ease-out both;
+      stroke-dashoffset: 32;
+    }
+  }
+
+  @keyframes shake {
+    20%,
+    60% {
+      transform: translateX(-6px);
+    }
+
+    40%,
+    80% {
+      transform: translateX(6px);
+    }
+  }
+
+  @keyframes success-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-inspection-form]');
+
+  type Control = HTMLInputElement | HTMLTextAreaElement;
+
+  const digitsOf = (value: string) => {
+    const digits = value.replace(/\D/g, '');
+    // Accept a leading US country code.
+    return digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+  };
+
+  const formatPhone = (value: string) => {
+    const d = digitsOf(value).slice(0, 10);
+    if (d.length < 4) return d;
+    if (d.length < 7) return `(${d.slice(0, 3)}) ${d.slice(3)}`;
+    return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`;
+  };
+
+  // Each rule returns an error message, or an empty string when the value is fine.
+  const rules: Record<string, (value: string) => string> = {
+    name: (value) => (value.trim().length < 2 ? 'Please enter your full name.' : ''),
+    phone: (value) => {
+      const digits = digitsOf(value);
+      if (digits.length === 0) return 'Please enter a phone number so we can call you back.';
+      return digits.length === 10 ? '' : 'Enter a 10-digit phone number, like (410) 555-0123.';
+    },
+    email: (value) => {
+      if (value.trim() === '') return '';
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim()) ? '' : 'That email address looks incomplete.';
+    },
+  };
+
+  if (form) {
+    const fieldsPanel = form.querySelector<HTMLElement>('[data-form-fields]')!;
+    const successPanel = form.querySelector<HTMLElement>('[data-form-success]')!;
+    const controls = [...form.querySelectorAll<Control>('.field input, .field textarea')];
+
+    // Sets the field's look and message; returns true when the value is valid.
+    const validate = (control: Control) => {
+      const field = control.closest<HTMLElement>('.field')!;
+      const rule = rules[control.name];
+      if (!rule) return true;
+
+      const message = rule(control.value);
+      const filled = control.value.trim() !== '';
+      field.dataset.state = message ? 'invalid' : filled ? 'valid' : '';
+      control.setAttribute('aria-invalid', String(Boolean(message)));
+      const error = field.querySelector('.field-error span');
+      if (error && message) error.textContent = message;
+      // Let the message slide shut before removing its text, so screen readers don't read a stale error.
+      if (error && !message) setTimeout(() => field.dataset.state !== 'invalid' && (error.textContent = ''), 300);
+      return !message;
+    };
+
+    const shake = (field: HTMLElement) => {
+      field.classList.remove('shake');
+      void field.offsetWidth; // restart the animation
+      field.classList.add('shake');
+    };
+
+    controls.forEach((control) => {
+      control.addEventListener('blur', () => validate(control));
+      control.addEventListener('input', () => {
+        if (control.name === 'phone' && control.selectionStart === control.value.length) {
+          control.value = formatPhone(control.value);
+        }
+        // Once a field has been judged, keep judging it as the visitor types.
+        if (control.closest<HTMLElement>('.field')?.dataset.state) validate(control);
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const invalid = controls.filter((control) => !validate(control));
+      if (invalid.length) {
+        invalid.forEach((control) => shake(control.closest<HTMLElement>('.field')!));
+        invalid[0].focus();
+        return;
+      }
+
+      const data = new FormData(form);
+      if (data.get('company')) return; // spam bot
+
+      const body = [
+        `Name: ${data.get('name')}`,
+        `Phone: ${data.get('phone')}`,
+        `Email: ${data.get('email') || 'not given'}`,
+        '',
+        `${data.get('message')}`,
+      ].join('\n');
+      const link = document.createElement('a');
+      link.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Free roof inspection request')}&body=${encodeURIComponent(body)}`;
+      form.append(link);
+      link.click();
+      link.remove();
+
+      const firstName = String(data.get('name')).trim().split(/\s+/)[0];
+      successPanel.querySelector('[data-form-name]')!.textContent = firstName ? `, ${firstName}` : '';
+      form.style.minHeight = `${form.offsetHeight}px`; // keep the card from jumping
+      fieldsPanel.hidden = true;
+      successPanel.hidden = false;
+      successPanel.style.minHeight = form.style.minHeight;
+      successPanel.focus();
+    });
+
+    form.querySelector('[data-form-reset]')?.addEventListener('click', () => {
+      form.reset();
+      controls.forEach((control) => {
+        control.closest<HTMLElement>('.field')!.dataset.state = '';
+        control.removeAttribute('aria-invalid');
+      });
+      successPanel.hidden = true;
+      fieldsPanel.hidden = false;
+      controls[0].focus();
+    });
+  }
+</script>

@@ -1,0 +1,81 @@
+---
+import { Image } from 'astro:assets';
+import crew from '../assets/photos/crew-tearoff.png';
+import flatRoof from '../assets/photos/flat-roof.webp';
+import sideRoofer from '../assets/photos/hero-cutout-2.png';
+import walkingRoofer from '../assets/photos/hero-roofer.webp';
+import siding from '../assets/photos/home-3.png';
+import inspection from '../assets/photos/inspection-chalk.png';
+import drone from '../assets/photos/roof-drone.png';
+import { services } from '../data/site';
+
+// One photo per service, in the same order as the services list.
+// Most are placeholders: replace with photos of real jobs before launch.
+const photos = [crew, inspection, siding, drone, flatRoof, walkingRoofer, sideRoofer];
+---
+
+<section class="py-20 lg:py-32">
+  <div class="wrap grid gap-12 lg:grid-cols-[5fr_7fr] lg:gap-20">
+    <!-- The photo follows the service being hovered or focused. -->
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <div data-wipe class="relative aspect-[4/3] overflow-hidden bg-line lg:aspect-[4/5]">
+        {photos.map((photo, i) => (
+          <Image
+            src={photo}
+            alt=""
+            data-service-photo={i}
+            widths={[400, 640, 900]}
+            sizes="(min-width: 1024px) 38vw, 92vw"
+            class:list={['absolute inset-0 size-full object-cover transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}
+          />
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p class="eyebrow" data-reveal>Services</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">Roofs, siding</span>
+        <span data-line class="block">and storm restoration</span>
+      </h2>
+
+      <ol data-rows class="mt-10 border-t border-line">
+        {services.map((service, i) => (
+          <li data-row>
+            <a href={service.href} data-service={i} class="group flex items-center gap-4 border-b border-line py-5 sm:gap-6">
+              <span class="self-start pt-1 font-display text-xs font-semibold tabular-nums text-mute" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block font-display text-[clamp(1.35rem,2.4vw,2rem)] font-medium leading-tight tracking-tight transition-transform duration-300 group-hover:translate-x-2 group-focus-visible:translate-x-2">
+                  {service.label}
+                </span>
+                <span class="mt-1 block text-sm leading-snug text-ink-soft">{service.blurb}</span>
+              </span>
+              <span class="grid size-11 shrink-0 place-items-center rounded-full border border-ink/30 transition duration-300 group-hover:rotate-45 group-hover:border-amber group-hover:bg-amber group-focus-visible:rotate-45 group-focus-visible:border-amber group-focus-visible:bg-amber" aria-hidden="true">
+                <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12L12 4M5.5 4H12v6.5" /></svg>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  const photos = document.querySelectorAll<HTMLElement>('[data-service-photo]');
+
+  function show(index: string | undefined) {
+    photos.forEach((photo) => {
+      const active = photo.dataset.servicePhoto === index;
+      photo.classList.toggle('opacity-100', active);
+      photo.classList.toggle('opacity-0', !active);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-service]').forEach((link) => {
+    link.addEventListener('mouseenter', () => show(link.dataset.service));
+    link.addEventListener('focus', () => show(link.dataset.service));
+  });
+</script>

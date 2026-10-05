@@ -1,0 +1,19 @@
+---
+import { services } from '../data/site';
+---
+
+<!-- The list is doubled so the loop has no visible seam. -->
+<div data-hero-band data-intro class="overflow-hidden bg-ink py-4 text-paper">
+  <div class="flex w-max animate-marquee motion-reduce:animate-none">
+    {[0, 1].map((copy) => (
+      <ul class="flex shrink-0 items-center" aria-hidden={copy === 1 ? 'true' : undefined}>
+        {services.map((service) => (
+          <li class="flex items-center gap-7 pr-7 font-display text-base font-semibold uppercase tracking-wide sm:text-lg">
+            <span>{service.label}</span>
+            <span class="size-2 rotate-45 bg-amber" aria-hidden="true"></span>
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>

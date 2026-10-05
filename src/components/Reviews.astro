@@ -1,0 +1,81 @@
+---
+import { googleReviewsUrl, reviews } from '../data/reviews';
+
+const stars = [0, 1, 2, 3, 4];
+---
+
+<section class="overflow-hidden py-20 lg:py-32">
+  <div class="wrap flex flex-wrap items-end justify-between gap-8">
+    <div>
+      <p class="eyebrow" data-reveal>Google reviews</p>
+      <h2 data-lines class="mt-4 text-[clamp(2.2rem,4.4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.03em]">
+        <span data-line class="block">What homeowners</span>
+        <span data-line class="block">say about us</span>
+      </h2>
+    </div>
+
+    <div data-reveal class="flex items-center gap-6">
+      <p class="flex items-center gap-3">
+        <span class="font-display text-5xl font-semibold tracking-tight">5.0</span>
+        <span class="grid gap-1 text-sm text-ink-soft">
+          <span class="flex gap-0.5 text-amber" aria-hidden="true">
+            {stars.map(() => (
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L10 14.9l-5.2 2.8 1-5.9L1.5 7.7l5.9-.8z" /></svg>
+            ))}
+          </span>
+          on Google
+        </span>
+      </p>
+      <div class="flex gap-2">
+        <button type="button" data-reviews-prev aria-label="Previous reviews" class="grid size-12 place-items-center rounded-full border-2 border-ink transition-colors hover:bg-ink hover:text-paper">
+          <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5" /></svg>
+        </button>
+        <button type="button" data-reviews-next aria-label="Next reviews" class="grid size-12 place-items-center rounded-full border-2 border-ink transition-colors hover:bg-ink hover:text-paper">
+          <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- A row that scrolls sideways; its left edge lines up with the page content. -->
+  <ul data-reviews data-rows tabindex="0" aria-label="Google reviews" class="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-5 px-5 sm:scroll-px-8 sm:px-8 xl:scroll-px-[calc((100vw-80rem)/2+2rem)] xl:px-[calc((100vw-80rem)/2+2rem)]">
+    {reviews.map((review, i) => (
+      <li data-row class="w-[82vw] max-w-md shrink-0 snap-start">
+        <figure class:list={['flex h-full flex-col gap-6 p-7 sm:p-8', i === 0 ? 'bg-ink text-paper' : 'border border-line bg-white']}>
+          <span class="flex gap-0.5 text-amber">
+            <span class="sr-only">5 out of 5 stars</span>
+            {stars.map(() => (
+              <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L10 14.9l-5.2 2.8 1-5.9L1.5 7.7l5.9-.8z" /></svg>
+            ))}
+          </span>
+          <blockquote class:list={['flex-1 leading-relaxed', i === 0 ? 'text-xl' : 'text-base']}>
+            <p>{review.text}</p>
+          </blockquote>
+          <figcaption class="text-sm">
+            <span class="block font-display text-base font-semibold">{review.name}</span>
+            <span class:list={[i === 0 ? 'text-paper/65' : 'text-ink-soft']}>
+              Google review{review.context && ` · ${review.context}`}
+            </span>
+          </figcaption>
+        </figure>
+      </li>
+    ))}
+  </ul>
+
+  <div class="wrap mt-10" data-reveal>
+    <a href={googleReviewsUrl} target="_blank" rel="noopener" class="btn btn-outline">Read all reviews on Google</a>
+  </div>
+</section>
+
+<script>
+  const list = document.querySelector<HTMLElement>('[data-reviews]');
+
+  function slide(direction: number) {
+    const card = list?.querySelector<HTMLElement>('li');
+    if (!list || !card) return;
+    list.scrollBy({ left: direction * (card.offsetWidth + 20), behavior: 'smooth' });
+  }
+
+  document.querySelector('[data-reviews-prev]')?.addEventListener('click', () => slide(-1));
+  document.querySelector('[data-reviews-next]')?.addEventListener('click', () => slide(1));
+</script>
